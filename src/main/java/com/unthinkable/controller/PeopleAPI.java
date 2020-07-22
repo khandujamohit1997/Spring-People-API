@@ -1,11 +1,7 @@
 package com.unthinkable.controller;
 
 import com.google.api.services.people.v1.PeopleService;
-import com.google.api.services.people.v1.model.ContactGroup;
-import com.google.api.services.people.v1.model.ContactGroupResponse;
-import com.google.api.services.people.v1.model.Empty;
 import com.google.api.services.people.v1.model.Person;
-import com.unthinkable.gsc.service.impl.ContactMangeServiceBean;
 import com.unthinkable.model.PeopleAPIModel;
 import com.unthinkable.service.PeopleAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +33,6 @@ public class PeopleAPI {
     @Autowired(required = false)
     PeopleService peopleService;
 
-    @Autowired
-    ContactMangeServiceBean mangeServiceBean;
-
     static String pageToken = null;
 
     public void getPeopleService() throws Exception {
@@ -67,7 +60,6 @@ public class PeopleAPI {
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         return peopleAPIService.getPhoneNumbers(peopleService);
     }
 
@@ -84,7 +76,6 @@ public class PeopleAPI {
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         return peopleAPIService.createContact(peopleService, person);
     }
 
@@ -93,7 +84,6 @@ public class PeopleAPI {
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         peopleAPIService.deleteContact(peopleService, resourceName);
     }
 
@@ -111,7 +101,6 @@ public class PeopleAPI {
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         return peopleAPIService.getDisplayName(peopleService, resourceName);
     }
 
@@ -125,7 +114,6 @@ public class PeopleAPI {
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         return peopleAPIService.getContactDetailsGoogle(peopleService, resourceName);
     }
 
@@ -133,15 +121,11 @@ public class PeopleAPI {
     public List<String> getDisplayNamesPagination(
         @RequestParam(name = "pageToken", defaultValue = "", required = false) String pageToken,
         @RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize) throws Exception {
-
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         List<String> displayNames;
-
         displayNames = peopleAPIService.getDisplayNamesPagination(peopleService, PeopleAPI.pageToken, pageSize);
-
         PeopleAPI.pageToken = displayNames.get(displayNames.size() - 1);
         displayNames.remove(displayNames.size() - 1);
         return displayNames;
@@ -149,95 +133,9 @@ public class PeopleAPI {
 
     @GetMapping("contacts/details")
     public List<Map<String, Object>> getAllContactDetails() throws Exception {
-
         if (peopleService == null) {
             peopleAPI.getPeopleService();
         }
-
         return peopleAPIService.getAllContactDetails(peopleService);
-    }
-
-
-    //GSC APIs
-    @GetMapping("gsc/feed")
-    public List<String> getGscFeed() {
-        return mangeServiceBean.getFeed();
-    }
-
-    @GetMapping("gsc/entries/count")
-    public int getGscEntriesCount() {
-        return mangeServiceBean.getEntriesCount();
-    }
-
-
-    @GetMapping("gsc/entry")
-    public String getGscEntry(@RequestParam("resourceName") String resourceName) {
-        return mangeServiceBean.getEntry(resourceName);
-    }
-
-    @PostMapping("gsc/entry/batch")
-    public List<String> getGscEntryBatch(@RequestBody List<String> resourceNames) {
-        return mangeServiceBean.getEntryBatch(resourceNames);
-    }
-
-    @GetMapping("gsc/entry/photo")
-    public byte[] getGscEntryPhoto(@RequestParam("resourceName") String resourceName) {
-        return mangeServiceBean.getEntryPhoto(resourceName);
-    }
-
-    @GetMapping("gsc/entry/photo/update")
-    public Person updateGscEntryPhoto(@RequestParam("resourceName") String resourceName) {
-        return mangeServiceBean.updateContactPhoto(resourceName);
-    }
-
-
-    @PostMapping("gsc/create/contact")
-    public String createGscContact(@RequestBody Person person) {
-        return mangeServiceBean.createContact(person);
-    }
-
-    @PutMapping("gsc/update/contact")
-    public Person updateGscContact(@RequestBody Person person, @RequestParam String resourceName) {
-        return mangeServiceBean.updateContact(person, resourceName);
-    }
-
-    @DeleteMapping("gsc/delete/contact")
-    public Empty deleteGscContact(@RequestParam String resourceName) {
-        return mangeServiceBean.removeContact(resourceName);
-    }
-
-    @GetMapping("gsc/groups")
-    public List<String> getGscContactGroup() {
-        return mangeServiceBean.getContactGroupBatch();
-    }
-
-    @GetMapping("gsc/group/members/count")
-    public int getGscContactGroupMembersCount(@RequestParam("resourceName") String resourceName) {
-        return mangeServiceBean.getContactGroupMembersCount(resourceName);
-    }
-
-    @GetMapping("gsc/group")
-    public ContactGroup getGscContactGroup(@RequestParam("resourceName") String resourceName) {
-        return mangeServiceBean.getContactGroup(resourceName);
-    }
-
-    @PostMapping("gsc/group/batch")
-    public List<ContactGroupResponse> getGscContactGroups(@RequestBody List<String> resourceName) {
-        return mangeServiceBean.getContactGroupBatch(resourceName);
-    }
-
-    @PostMapping("gsc/create/group")
-    public ContactGroup createGscGroup(@RequestBody ContactGroup contactGroup) {
-        return mangeServiceBean.createContactGroup(contactGroup);
-    }
-
-    @PutMapping("gsc/update/group")
-    public ContactGroup updateGscContactGroup(@RequestBody ContactGroup contactGroup, @RequestParam String resourceName) {
-        return mangeServiceBean.updateContactGroup(contactGroup, resourceName);
-    }
-
-    @DeleteMapping("gsc/delete/group")
-    public Empty deleteGscContactGroup(@RequestParam String resourceName) {
-        return mangeServiceBean.removeContactGroup(resourceName);
     }
 }

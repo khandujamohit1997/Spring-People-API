@@ -24,25 +24,20 @@ public class GscPeopleService {
     private static final String APPLICATION_NAME = "Google-API";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "token-personal";
-
     private static final List<String> SCOPES = Arrays.asList(PeopleServiceScopes.CONTACTS_READONLY, PeopleServiceScopes.CONTACTS);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
-
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws Exception {
-
         InputStream in = GooglePeopleApiApplication.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
             HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
             .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
             .setAccessType("offline")
             .build();
-
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
