@@ -13,7 +13,6 @@ import com.google.api.services.people.v1.model.UpdateContactPhotoRequest;
 import com.google.api.services.people.v1.model.UpdateContactPhotoResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class ContactRequestMethodBuilder {

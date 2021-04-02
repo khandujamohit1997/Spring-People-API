@@ -1,7 +1,6 @@
 package com.unthinkable.gsc.contact.impl;
 
 import com.google.api.client.util.Base64;
-import com.google.api.client.util.IOUtils;
 import com.google.api.services.people.v1.PeopleService;
 import com.google.api.services.people.v1.model.BatchGetContactGroupsResponse;
 import com.google.api.services.people.v1.model.ContactGroup;
@@ -16,8 +15,6 @@ import com.google.api.services.people.v1.model.UpdateContactPhotoResponse;
 import com.unthinkable.gsc.contact.ContactEntryIterator;
 import com.unthinkable.gsc.contact.GroupEntryIterator;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

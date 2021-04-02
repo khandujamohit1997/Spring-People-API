@@ -6,8 +6,6 @@ import com.google.api.services.people.v1.model.Membership;
 import com.google.api.services.people.v1.model.Person;
 import com.google.api.services.people.v1.model.Photo;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
